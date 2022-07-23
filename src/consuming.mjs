@@ -28,6 +28,13 @@ export function getCatch() {
 */
 
 export function chain() {
+    axios.get("http://localhost:3000/orders/1")
+    .then(({data}) => {
+        return axios.get(`http://localhost:3000/addresses/${data.shippingAddress}`); // remember to return the promise
+    })
+    .then(({data}) => {
+        setText(`City: ${data.city}`);
+    }); 
 }
 
 export function chainCatch() {
