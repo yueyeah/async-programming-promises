@@ -56,4 +56,26 @@ export function chainCatch() {
 }
 
 export function final() {
+    showWaiting(); // this is the loading indicator imported from the results.mjs file 
+    axios.get("http://localhost:3000/orders/1")
+    .then(({data}) => {
+        axios.get(
+            `http://localhost:3000/addresses/${data.shippingAddress}`
+        ); // to cause an error, remove the return keyword
+        throw new Error("TypeError - first (won't show up)");
+    })
+    .catch((err) => { // this first catch will only catch errors from the first then
+        setText(err);
+        throw new Error("TypeError - second one that should show up"); // this will throw it to the last catch
+    })
+    .then(({data}) => {
+        setText(`City: ${data.city}`);
+    })
+    .catch(err => setText(err))// this last catch will catch all errors
+    .finally(() => {
+        setTimeout(() => {
+            hideWaiting();
+        }, 1500);
+        appendText("Done liao lah");
+    });
 }
