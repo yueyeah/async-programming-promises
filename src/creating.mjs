@@ -24,7 +24,7 @@ export function interval(){
     const waiter = new Promise((resolve) => {
         // setInterval fires multiple times, unlike setTimeout
         setInterval(() => {
-            console.log("interval is firing");
+            console.log("interval is firing"); // this will keep on firing without clearInterval
             resolve(`timeout liao! ${++counter}`);
         }, 1500);
     });
@@ -47,7 +47,7 @@ export function clearIntervalChain(){
     const waiter = new Promise((resolve) => {
         // setInterval fires multiple times, unlike setTimeout
         interval = setInterval(() => {
-            console.log("interval is firing");
+            console.log("interval is firing"); // this will only fire when clicked
             resolve(`timeout liao! ${++counter}`);
         }, 1500);
     });
@@ -56,7 +56,7 @@ export function clearIntervalChain(){
         setText(text);
     })
     .finally(() => {
-        clearInterval(interval);
+        clearInterval(interval); // to stop the interval from constantly firing
     });
 }
 
