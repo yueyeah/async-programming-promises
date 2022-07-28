@@ -136,4 +136,11 @@ export function allSettled(){
 }
 
 export function race(){
+    // to get the second endpoint, run `npm run secondary` in another terminal
+    let users = axios.get("http://localhost:3000/users");
+    let backup = axios.get("http://localhost:3001/users");
+    // race() will get the first one to settle, unlike all/allSettled
+    Promise.race([users,backup])
+        .then(users => setText(JSON.stringify(users.data)))
+        .catch(reason => setText(reason));
 }
