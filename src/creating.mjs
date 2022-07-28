@@ -108,6 +108,31 @@ export function allPromises(){
 }
 
 export function allSettled(){
+    // each of these variables are promises
+    let categories = axios.get("http://localhost:3000/itemCategories");
+    let statuses = axios.get("http://localhost:3000/orderStatuses");
+    let userTypes = axios.get("http://localhost:3000/userTypes");
+    /* addressTypes is added for testing only, there is no such endpoint. 
+    add to the Promise.all() and then() to observe the 404
+    */
+    let addressTypes = axios.get("http://localhost:3000/addressTypes"); 
+    /* Promise.allSettled() resolves with all promises, when either fulfilled or rejected. 
+    fulfilled = { status: fulfilled, value: {} }
+    rejected = { status: rejected, reason: {} }
+    Since it always resolves, no need catch() block, but still recommended. 
+    */
+    Promise.allSettled([categories, statuses, userTypes, addressTypes])
+    // note that the order in the list arg of then() is the same order as the all()
+        .then((values) => { // no need to pass in an array of all the values, just a single argument 
+            let results = values.map((v) => {
+                if (v.status === "fulfilled") {
+                    return `FULFILLED: ${JSON.stringify(v.value.data[0])} `;
+                } else {
+                    return `REJECTED: ${v.reason.message} `;
+                }
+            });
+            setText(results);
+        });
 }
 
 export function race(){
