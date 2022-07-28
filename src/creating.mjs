@@ -82,6 +82,29 @@ export function xhr(){
 }
 
 export function allPromises(){
+    // each of these variables are promises
+    let categories = axios.get("http://localhost:3000/itemCategories");
+    let statuses = axios.get("http://localhost:3000/orderStatuses");
+    let userTypes = axios.get("http://localhost:3000/userTypes");
+    /* addressTypes is added for testing only, there is no such endpoint. 
+    add to the Promise.all() and then() to observe the 404
+    */
+    let addressTypes = axios.get("http://localhost:3000/addressTypes"); 
+    /* Promise.all() to queue up all three promises and wait for them to return, or for 
+    the first one to be rejected. 
+    */
+    Promise.all([categories, statuses, userTypes, addressTypes])
+    // note that the order in the list arg of then() is the same order as the all()
+        .then(([cat, stat, type, atype]) => { 
+            setText("");
+            appendText(JSON.stringify(cat.data)); // this are all axios objects, so need .data property
+            appendText(JSON.stringify(stat.data));
+            appendText(JSON.stringify(type.data));
+            appendText(JSON.stringify(atype.data));
+        })
+            .catch(reasons => {
+                setText(reasons); // will output 404 for addressTypes
+            });
 }
 
 export function allSettled(){
