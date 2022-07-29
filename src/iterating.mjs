@@ -15,7 +15,13 @@ export async function getCatch(){
     
 }
 
-export function chain(){
+/*
+This is same as the chain function in consuming.mjs.
+*/
+export async function chain(){
+    const { data } = await axios.get("http://localhost:3000/orders/1");
+    const { data: address } = await axios.get(`http://localhost:3000/addresses/${data.shippingAddress}`);
+    setText(`City: ${JSON.stringify(address.city)}`);
 }
 
 export function concurrent(){
