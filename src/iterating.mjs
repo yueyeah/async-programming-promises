@@ -24,7 +24,18 @@ export async function chain(){
     setText(`City: ${JSON.stringify(address.city)}`);
 }
 
-export function concurrent(){
+export async function concurrent(){
+    // by not using await for both get(), allow both to query endpoint concurrently
+    const orderStatus = axios.get("http://localhost:3000/orderStatuses");
+    const orders = axios.get("http://localhost:3000/orders");
+    setText("");
+    // for concurrent, await the variable instead of awaiting a function
+    // this will wait for the slower request
+    const { data: statuses } = await orderStatus;
+    const { data: order } = await orders;
+
+    appendText(JSON.stringify(statuses));
+    appendText(JSON.stringify(order[0]));
 }
 
 export function parallel(){
