@@ -38,5 +38,22 @@ export async function concurrent(){
     appendText(JSON.stringify(order[0]));
 }
 
-export function parallel(){
+/*
+Click "Parallel" button on the webpage
+Scroll down in time to see them arrive in the order of completion
+If they complete at different speeds, they will appear at different times
+*/
+export async function parallel(){
+    setText("");
+    // await all() will wait for all promises to resolve or 1 reject before continuing
+    await Promise.all([
+        (async () => { // anonymous async function to return first promise of orderStatuses
+            const { data } = await axios.get("http://localhost:3000/orderStatuses");
+            appendText(JSON.stringify(data));
+        }) (),
+        (async () => { // anonymous async function to return first promise of orders
+            const { data } = await axios.get("http://localhost:3000/orders");
+            appendText(JSON.stringify(data));
+        }) ()
+    ]);
 }
